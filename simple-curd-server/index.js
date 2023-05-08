@@ -30,9 +30,14 @@ async function run() {
     await client.connect();
     // Send a ping to confirm a successful connection
 
-    app.post("/user", async (req, res) => {
+    const database = client.db("usersDB");
+    const userCollection = database.collection("users");
+
+    app.post("/users", async (req, res) => {
       const user = req.body;
       console.log("user", user);
+      const result = await userCollection.insertOne(user);
+      res.send(result);
     });
 
     await client.db("admin").command({ ping: 1 });
